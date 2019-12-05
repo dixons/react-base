@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components'
 import List from './List';
-import withInteractiveList from './withInteractiveList';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -32,19 +31,7 @@ const items = [
   'testing-library',
   'redux',
   'npm'
-]
-
-function renderItem(item, handleClick) {
-  return (
-    <li onClick={() => handleClick(item)}>:-){item}</li>
-  )
-}
-
-const ItemComponent = ({ handleClick, item }) => (
-  <li onClick={handleClick}>:-D {item}</li>
-)
-
-const MyInteractiveList = withInteractiveList(ItemComponent);
+];
 
 function App() {
   return (
@@ -52,18 +39,7 @@ function App() {
       <GlobalStyles />
       <ContentWrapper isHoliday={Math.random() > 0.5}>
         <h1>react-base based on:</h1>
-        <List items={items} renderItem={undefined}/>
-        <List items={items} renderItem={renderItem} />
-        <List items={items}>
-          {
-            (item, handleClick) => (
-              <li onClick={() => handleClick(item)}>:-({item}</li>
-            )
-          }
-        </List>
-
-        <MyInteractiveList items={items}></MyInteractiveList>
-        
+        <List items={items} />
       </ContentWrapper>
     </AppWrapper>
   )

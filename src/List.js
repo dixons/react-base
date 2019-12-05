@@ -1,35 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useInteractiveList } from './hooks';
 
-class List extends React.PureComponent {
-  onClickItem(item) {
-    window.alert(item)
-  }
-  render() {
-    const props = this.props;
-    return (
+export default ({ items }) => {
+  const { addItem, removeItem, list } = useInteractiveList(items);
+  const [inputValue, setInputValue] = useState('');
+
+  return (
+    <>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        addItem(inputValue);
+        setInputValue('');
+      }}>
+        <input value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+        <button type="submit">Add</button>
+      </form>
       <ul>
-
-        {props.items.map(
-          item => props.children ? props.children(item, this.onClickItem) : props.renderItem(item, this.onClickItem)
-        )}
-        
+        {list.map((item, index) => (
+          <li onClick={() => removeItem(index)}>{item}</li>
+        ))}
       </ul>
-    )
-  }
-};
-
-List.propTypes = {
-  items: PropTypes.array.isRequired,
-  renderItem: PropTypes.func,
-  children: PropTypes.func
+    </>
+  );
 }
-
-List.defaultProps = {
-  renderItem: (item, handleClick) => (
-    <li onClick={() => handleClick(item)}>{item}</li>
-  ),
-  children: undefined
-}
-
-export default List;
