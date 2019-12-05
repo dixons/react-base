@@ -1,5 +1,7 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components'
+import List from './List';
+import withInteractiveList from './withInteractiveList';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -18,23 +20,50 @@ const AppWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   border: 1px solid #BCB5B9;
-  border-radius: 3px;
+  border-radius: ${(props) => props.isHoliday ? '1px' : '10px'};
   padding: 20px 40px;
   background: #F2F2F2;
   max-width: 640px;
 `;
 
+const items = [
+  'create-react-app',
+  'styled-components',
+  'testing-library',
+  'redux',
+  'npm'
+]
+
+function renderItem(item, handleClick) {
+  return (
+    <li onClick={() => handleClick(item)}>:-){item}</li>
+  )
+}
+
+const ItemComponent = ({ handleClick, item }) => (
+  <li onClick={handleClick}>:-D {item}</li>
+)
+
+const MyInteractiveList = withInteractiveList(ItemComponent);
+
 function App() {
   return (
     <AppWrapper>
       <GlobalStyles />
-      <ContentWrapper>
+      <ContentWrapper isHoliday={Math.random() > 0.5}>
         <h1>react-base based on:</h1>
-        <ul>
-          <li>create-react-app</li>
-          <li>styled-components</li>
-          <li>testing-library</li>
-        </ul>
+        <List items={items} renderItem={undefined}/>
+        <List items={items} renderItem={renderItem} />
+        <List items={items}>
+          {
+            (item, handleClick) => (
+              <li onClick={() => handleClick(item)}>:-({item}</li>
+            )
+          }
+        </List>
+
+        <MyInteractiveList items={items}></MyInteractiveList>
+        
       </ContentWrapper>
     </AppWrapper>
   )
